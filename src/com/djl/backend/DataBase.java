@@ -5,7 +5,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.SQLException; 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class DataBase {
@@ -22,19 +24,20 @@ public class DataBase {
     private static final String QUERY = "select id,name,email,country,password from Users where id =?";
     private static final String SELECT_ALL_QUERY = "select * from users";
     
-    
-    
-    
     public void insertRecord() throws SQLException {
         System.out.println(INSERT_USERS_SQL);
         // Step 1: Establishing a Connection
+        //from() method Obtains an instance of Timestamp from an Instant object  
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        String timestamp  = dateFormat.format(new Date());
         try (Connection connection = DriverManager.getConnection(url, user, pwd);
-
+  
+                
             // Step 2:Create a statement using connection object
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USERS_SQL)) {
             preparedStatement.setInt(1, 1);
             preparedStatement.setString(2, "Tony");
-            preparedStatement.setString(3, "26-jun-21");
+            preparedStatement.setString(3, timestamp);
 
             System.out.println(preparedStatement);
             // Step 3: Execute the query or update query

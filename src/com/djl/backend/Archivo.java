@@ -1,23 +1,26 @@
-
 package com.djl.backend;
+import java.io.Serializable;
 
-public class Archivo {
+
+
+public class Archivo implements Serializable {
     
     private int id;
     private String name;
     private int size;
     private String type;
     private String user;
-    private byte[] data;
 
-
-    public Archivo(int id, String name, int size, String type, String user, byte[] data){
+    public Archivo(int id, String name, int size, String type, String user){
         this.id = id;
         this.name = name;
         this.size = size;
         this.type = type;
         this.user = user;
-        this.data = data;
+    }
+
+    public Archivo() {
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 
@@ -42,9 +45,6 @@ public class Archivo {
         return user;
     }
 
-    public byte[] getData() {
-        return data;
-    }
     
     // Setters
     public void setId(int id) {
@@ -66,10 +66,5 @@ public class Archivo {
     public void setUser(String user) {
         this.user = user;
     }
-
-    public void setData(byte[] data) {
-        this.data = data;
-    }
-    
 
 }
