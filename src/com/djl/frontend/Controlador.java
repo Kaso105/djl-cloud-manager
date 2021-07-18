@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -75,7 +76,9 @@ public class Controlador
     public DefaultTableModel update(JTable tabla1) throws IOException, ClassNotFoundException{
         ArrayList<Archivo> lista=new ArrayList();
         String comando="solicitarLista";
-        DefaultTableModel tabla2=(DefaultTableModel) tabla1.getModel();
+        DefaultTableModel tabla2=new DefaultTableModel();
+        DecimalFormat formato1= new DecimalFormat("#.00");
+        tabla2=(DefaultTableModel) tabla1.getModel();
         byte[] size=comando.getBytes();
         try{
             Socket socket = new Socket(host, port);
@@ -92,9 +95,8 @@ public class Controlador
             System.out.println(lista.size());
             for(Archivo x:lista){
                 tabla2.addRow(new Object[]{
-                    x.getId(),
                     x.getName(),
-                    x.getSize(),
+                    formato1.format((float)x.getSize()/1024)+"KB",
                     x.getType(),
                     x.getUser(),
                 });
@@ -104,6 +106,23 @@ public class Controlador
 
         return tabla2;
     }
+    public void eliminar(String fileName){
+        String comando="eliminarArchivo";
+        byte[] comandoBytes=comando.getBytes();
+        try{
+            Socket socket = new Socket(host, port);
+            
+            try (DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream())) {
+                dataOutputStream.writeInt(comandoBytes.length);
+                dataOutputStream.write(comandoBytes);
+                dataOutputStream.writeUTF(fileName);
+                dataOutputStream.flush();
+                dataOutputStream.close();
+            }
+        }catch (IOException ex) {}
+        
+    }
+    
     public ArrayList<Archivo> read() throws IOException, ClassNotFoundException{
         ArrayList<Archivo> lista=new ArrayList<>();
         ServerSocket serverSocket1 = new ServerSocket(2070);

@@ -3,7 +3,6 @@ package com.djl.backend;
 
 import java.util.List;
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -11,8 +10,6 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
 
 public class Server {
     
@@ -22,7 +19,6 @@ public class Server {
     static String downloadPath = System.getProperty("user.dir")+"\\Download";
     static File downloadFolder = new File(downloadPath);
     public static void main(String[] args) throws IOException {
-        
         
         //Lee todos los archivos de la carpeta del servidor la primera vez
         findAllFilesInFolder(downloadFolder);
@@ -62,7 +58,9 @@ public class Server {
                     if(!exist){
                         if(fileName.equals("solicitarLista")){
                             enviarLista();
-                            System.out.println("listo mano");
+                        }else if(fileName.equals("eliminarArchivo")){
+                            String nombreArchivo=dataInputStream.readUTF();
+                            eliminar(nombreArchivo);
                         }
                         // Lee cuanda data esperar del contenido en si del archivo.
                         int fileContentLength = dataInputStream.readInt();
@@ -107,7 +105,7 @@ public class Server {
         int i=1;
 		for (File file : folder.listFiles()) {
 			if (!file.isDirectory()) {
-                                Archivo newArchivo= new Archivo(i,file.getName(),(int)file.getTotalSpace(),getFileExtension(file.getName()),"daniel");
+                                Archivo newArchivo= new Archivo(i,file.getName(),(float)file.length(),getFileExtension(file.getName()),"daniel");
                                 archivo.add(newArchivo);
                                 i++;
 			} else {
@@ -136,5 +134,15 @@ public class Server {
         dataOut.flush();
         dataOut.close();
         
+    }
+    public static void eliminar(String nombre){
+        for(Archivo x:archivo){
+            if(x.getName().equals(nombre)){
+                archivo.remove(x);
+                break;
+            }
+        }
+        File del=new File(downloadPath+"\\"+nombre);
+        del.delete();
     }
 }

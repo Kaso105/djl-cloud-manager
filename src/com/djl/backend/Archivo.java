@@ -7,12 +7,11 @@ public class Archivo implements Serializable {
     
     private int id;
     private String name;
-    private int size;
+    private float size;
     private String type;
     private String user;
 
-    public Archivo(int id, String name, int size, String type, String user){
-        this.id = id;
+    public Archivo(int id, String name,float size, String type, String user){
         this.name = name;
         this.size = size;
         this.type = type;
@@ -33,7 +32,7 @@ public class Archivo implements Serializable {
         return name;
     }
 
-    public int getSize() {
+    public float getSize() {
         return size;
     }
 

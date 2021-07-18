@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 public class Cliente extends javax.swing.JFrame {
@@ -12,7 +13,7 @@ public class Cliente extends javax.swing.JFrame {
     Controlador control;
     ArrayList<Archivo> archivos=new ArrayList<Archivo>();
     
-    public Cliente() {
+    public Cliente() throws IOException {
         initComponents();
         control = new Controlador();
         actualizarTabla();
@@ -27,10 +28,6 @@ public class Cliente extends javax.swing.JFrame {
         BorrarArchivo = new javax.swing.JMenuItem();
         DescargarArchivo = new javax.swing.JMenuItem();
         tabOptions = new javax.swing.JTabbedPane();
-        jPanel2 = new javax.swing.JPanel();
-        btnUpdate = new javax.swing.JButton();
-        btnChooseUpdate = new javax.swing.JButton();
-        lblFileStatusU = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         btnCreate = new javax.swing.JButton();
         btnChooseCreate = new javax.swing.JButton();
@@ -43,6 +40,11 @@ public class Cliente extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
 
         BorrarArchivo.setText("Eliminar archivo");
+        BorrarArchivo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BorrarArchivoActionPerformed(evt);
+            }
+        });
         jPopupMenu1.add(BorrarArchivo);
 
         DescargarArchivo.setText("Descargar");
@@ -50,55 +52,6 @@ public class Cliente extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("DJL Cloud Manager");
-
-        btnUpdate.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnUpdate.setText("Actualizar");
-        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUpdateActionPerformed(evt);
-            }
-        });
-
-        btnChooseUpdate.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnChooseUpdate.setText("Escoger Archivo");
-        btnChooseUpdate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnChooseUpdateActionPerformed(evt);
-            }
-        });
-
-        lblFileStatusU.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
-        lblFileStatusU.setText("Escoga un Archivo");
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(68, 68, 68)
-                        .addComponent(btnUpdate))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(56, 56, 56)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblFileStatusU)
-                            .addComponent(btnChooseUpdate))))
-                .addContainerGap(52, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(47, 47, 47)
-                .addComponent(btnChooseUpdate)
-                .addGap(28, 28, 28)
-                .addComponent(btnUpdate)
-                .addGap(44, 44, 44)
-                .addComponent(lblFileStatusU)
-                .addContainerGap(199, Short.MAX_VALUE))
-        );
-
-        tabOptions.addTab("Actualizar", jPanel2);
 
         btnCreate.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnCreate.setText("Subir");
@@ -133,7 +86,7 @@ public class Cliente extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblFileStatusC)
                             .addComponent(btnChooseCreate))))
-                .addContainerGap(52, Short.MAX_VALUE))
+                .addContainerGap(88, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -173,19 +126,24 @@ public class Cliente extends javax.swing.JFrame {
         lblUsr.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         lblUsr.setText("USUARIOS DEL SISTEMA");
 
+        tblDoc = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex, int colIndex){
+                return false;
+            }
+        };
         tblDoc.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "ID", "Nombre", "Tamaño", "Formato", "Creado por", "Últ. modificación"
+                "Nombre", "Tamaño", "Formato", "Creado por", "Últ. modificación"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class
+                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -204,14 +162,13 @@ public class Cliente extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(550, 550, 550)
-                            .addComponent(lblUsr)
-                            .addGap(230, 230, 230))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addGap(550, 550, 550)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(586, 586, 586)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblUsr)
+                                .addGap(230, 230, 230))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(tabOptions, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
@@ -243,6 +200,17 @@ public class Cliente extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void BorrarArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BorrarArchivoActionPerformed
+        try {
+            // TODO add your handling code here:
+            int index = tblDoc.getSelectedRow();
+            control.eliminar(tblDoc.getValueAt(index, 0).toString());
+            control.update(tblDoc);
+        } catch (IOException | ClassNotFoundException ex) {
+            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_BorrarArchivoActionPerformed
+
     private void btnChooseCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChooseCreateActionPerformed
         control.escogerArchivo(lblFileStatusC);
     }//GEN-LAST:event_btnChooseCreateActionPerformed
@@ -256,16 +224,6 @@ public class Cliente extends javax.swing.JFrame {
             Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnCreateActionPerformed
-
-    private void btnChooseUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChooseUpdateActionPerformed
-        control.escogerArchivo(lblFileStatusU);
-    }//GEN-LAST:event_btnChooseUpdateActionPerformed
-
-    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        // TODO add your handling code here:
-        actualizarTabla();
-
-    }//GEN-LAST:event_btnUpdateActionPerformed
     private void actualizarTabla(){
         try {
             DefaultTableModel tabla = control.update(tblDoc);
@@ -304,26 +262,25 @@ public class Cliente extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new Cliente().setVisible(true);
+                try {
+                    new Cliente().setVisible(true);
+                } catch (IOException ex) {
+                    Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem BorrarArchivo;
     private javax.swing.JMenuItem DescargarArchivo;
     private javax.swing.JButton btnChooseCreate;
-    private javax.swing.JButton btnChooseUpdate;
     private javax.swing.JButton btnCreate;
-    private javax.swing.JButton btnUpdate;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblFileStatusC;
-    private javax.swing.JLabel lblFileStatusU;
     private javax.swing.JLabel lblUsr;
     private javax.swing.JTabbedPane tabOptions;
     private javax.swing.JTable tblDoc;
