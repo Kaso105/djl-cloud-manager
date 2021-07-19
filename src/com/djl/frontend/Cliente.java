@@ -26,6 +26,7 @@ public class Cliente extends javax.swing.JFrame {
         jPopupMenu1 = new javax.swing.JPopupMenu();
         BorrarArchivo = new javax.swing.JMenuItem();
         DescargarArchivo = new javax.swing.JMenuItem();
+        jFrame1 = new javax.swing.JFrame();
         tabOptions = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         btnCreate = new javax.swing.JButton();
@@ -53,6 +54,19 @@ public class Cliente extends javax.swing.JFrame {
             }
         });
         jPopupMenu1.add(DescargarArchivo);
+
+        jFrame1.setBackground(new java.awt.Color(153, 255, 153));
+
+        javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
+        jFrame1.getContentPane().setLayout(jFrame1Layout);
+        jFrame1Layout.setHorizontalGroup(
+            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 847, Short.MAX_VALUE)
+        );
+        jFrame1Layout.setVerticalGroup(
+            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 596, Short.MAX_VALUE)
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("DJL Cloud Manager");
@@ -288,6 +302,7 @@ public class Cliente extends javax.swing.JFrame {
     private javax.swing.JMenuItem DescargarArchivo;
     private javax.swing.JButton btnChooseCreate;
     private javax.swing.JButton btnCreate;
+    private javax.swing.JFrame jFrame1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPopupMenu jPopupMenu1;
