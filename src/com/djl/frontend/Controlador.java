@@ -2,9 +2,11 @@
 package com.djl.frontend;
 
 import com.djl.backend.Archivo;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -22,15 +24,23 @@ public class Controlador
     final File[] fileToSend = new File[1];
     final String host="localhost";
     final int port=2069;
+    File ultimaCarpeta;
+
+    public Controlador() {
+        this.ultimaCarpeta = new File("");
+    }
     // Accion del boton SUBIR.
     // Abre un JFileChooser para seleccionar el archivo a subir.
     public void escogerArchivo(JLabel jlFileName) 
     {
         JFileChooser jFileChooser = new JFileChooser();
         jFileChooser.setDialogTitle("Abrir");
+        jFileChooser.setCurrentDirectory(ultimaCarpeta);
             if (jFileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
             // Obtener el archivo seleccionado.
+            
             this.fileToSend[0] = jFileChooser.getSelectedFile();
+            ultimaCarpeta=jFileChooser.getCurrentDirectory();
             // Cambiar el nombre del JLabel para confirmar
             jlFileName.setText(fileToSend[0].getName());
         }
@@ -91,8 +101,6 @@ public class Controlador
             }
             lista=read();
             tabla2.setRowCount(0);
-            System.out.println("borrado");
-            System.out.println(lista.size());
             for(Archivo x:lista){
                 tabla2.addRow(new Object[]{
                     x.getName(),
@@ -107,7 +115,10 @@ public class Controlador
         return tabla2;
     }
     public void eliminar(String fileName){
-        String comando="eliminarArchivo";
+        comando("eliminarArchivo",fileName);
+    }
+    
+    public void comando(String comando,String fileName){
         byte[] comandoBytes=comando.getBytes();
         try{
             Socket socket = new Socket(host, port);
@@ -120,9 +131,35 @@ public class Controlador
                 dataOutputStream.close();
             }
         }catch (IOException ex) {}
-        
     }
     
+    public void descargarArchivo(String nombre) throws IOException{
+        comando("descargar",nombre);
+        ServerSocket serverSocket = new ServerSocket(2070);
+        Socket socket = serverSocket.accept();
+        DataInputStream input = new DataInputStream(socket.getInputStream());
+        JFileChooser carpeta = new JFileChooser();
+        carpeta.setDialogTitle("Seleccione la ubicación de descarga");
+        carpeta.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        carpeta.setCurrentDirectory(ultimaCarpeta);
+        carpeta.setAcceptAllFileFilterUsed(false);
+        
+        if(carpeta.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            
+            File selectedPath=carpeta.getSelectedFile();
+            
+            byte[] fileBytes=new byte[input.readInt()];
+            input.readFully(fileBytes);
+            ultimaCarpeta=selectedPath;
+            File file = new File(ultimaCarpeta+"\\"+nombre);
+            FileOutputStream file1 = new FileOutputStream(file);
+            file1.write(fileBytes);
+            file1.close();
+            input.close();
+        }
+        socket.close();
+        serverSocket.close();
+    }
     public ArrayList<Archivo> read() throws IOException, ClassNotFoundException{
         ArrayList<Archivo> lista=new ArrayList<>();
         ServerSocket serverSocket1 = new ServerSocket(2070);
@@ -131,7 +168,6 @@ public class Controlador
                 InputStream in = socket1.getInputStream();
                 ObjectInputStream input = new ObjectInputStream(in);
                 lista=(ArrayList<Archivo>)input.readObject();
-                System.out.println("Si");
                 in.close();
                 serverSocket1.close();   
             }

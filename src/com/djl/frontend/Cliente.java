@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 public class Cliente extends javax.swing.JFrame {
@@ -48,10 +47,16 @@ public class Cliente extends javax.swing.JFrame {
         jPopupMenu1.add(BorrarArchivo);
 
         DescargarArchivo.setText("Descargar");
+        DescargarArchivo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DescargarArchivoActionPerformed(evt);
+            }
+        });
         jPopupMenu1.add(DescargarArchivo);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("DJL Cloud Manager");
+        setForeground(new java.awt.Color(51, 255, 51));
 
         btnCreate.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnCreate.setText("Subir");
@@ -224,6 +229,16 @@ public class Cliente extends javax.swing.JFrame {
             Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnCreateActionPerformed
+
+    private void DescargarArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DescargarArchivoActionPerformed
+        // TODO add your handling code here:
+        int index = tblDoc.getSelectedRow();
+        try {
+            control.descargarArchivo(tblDoc.getValueAt(index, 0).toString());
+        } catch (IOException ex) {
+            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_DescargarArchivoActionPerformed
     private void actualizarTabla(){
         try {
             DefaultTableModel tabla = control.update(tblDoc);
@@ -259,14 +274,11 @@ public class Cliente extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    new Cliente().setVisible(true);
-                } catch (IOException ex) {
-                    Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
-                }
+        java.awt.EventQueue.invokeLater(() -> {
+            try {
+                new Cliente().setVisible(true);
+            } catch (IOException ex) {
+                Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
     }

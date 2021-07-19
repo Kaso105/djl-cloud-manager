@@ -3,7 +3,10 @@ package com.djl.backend;
 
 import java.util.List;
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -15,12 +18,13 @@ public class Server {
     
    
     // Array list para guardar informacion sobre los archivos que se reciben
-    static List<Archivo> archivo = new ArrayList<>();
+    static ArrayList<Archivo> archivo = new ArrayList<>();
     static String downloadPath = System.getProperty("user.dir")+"\\Download";
     static File downloadFolder = new File(downloadPath);
+    static ArrayList<ArrayList> usuarios= new ArrayList<>();
     public static void main(String[] args) throws IOException {
-        
         //Lee todos los archivos de la carpeta del servidor la primera vez
+        downloadPath="hola";
         findAllFilesInFolder(downloadFolder);
         int fileId = archivo.get(archivo.size()-1).getId();
         // Crea un server socket donde el servidor esperara requests.
@@ -61,6 +65,8 @@ public class Server {
                         }else if(fileName.equals("eliminarArchivo")){
                             String nombreArchivo=dataInputStream.readUTF();
                             eliminar(nombreArchivo);
+                        }else if(fileName.equals("descargar")){
+                            compartirArchivo(dataInputStream.readUTF());
                         }
                         // Lee cuanda data esperar del contenido en si del archivo.
                         int fileContentLength = dataInputStream.readInt();
@@ -145,4 +151,19 @@ public class Server {
         File del=new File(downloadPath+"\\"+nombre);
         del.delete();
     }
+    public static void compartirArchivo(String nombre) throws FileNotFoundException, IOException{
+        File file=new File(downloadPath+"\\"+nombre);
+        DataOutputStream output;
+        try (FileInputStream input = new FileInputStream(file)) {
+            Socket socket1 = new Socket("localhost", 2070);
+            output = new DataOutputStream(socket1.getOutputStream());
+            byte[] fileBytes = new byte[(int)file.length()];
+            input.read(fileBytes);
+            output.writeInt(fileBytes.length);
+            output.write(fileBytes);
+        }
+        output.flush();
+        output.close();
+    }
+    
 }
