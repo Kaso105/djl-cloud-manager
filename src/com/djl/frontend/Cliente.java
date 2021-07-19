@@ -234,7 +234,8 @@ public class Cliente extends javax.swing.JFrame {
         // TODO add your handling code here:
         int index = tblDoc.getSelectedRow();
         try {
-            control.descargarArchivo(tblDoc.getValueAt(index, 0).toString());
+            if(index>=0)
+                control.descargarArchivo(tblDoc.getValueAt(index, 0).toString());
         } catch (IOException ex) {
             Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
         }

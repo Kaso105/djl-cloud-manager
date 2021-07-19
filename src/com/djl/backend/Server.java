@@ -22,9 +22,9 @@ public class Server {
     static String downloadPath = System.getProperty("user.dir")+"\\Download";
     static File downloadFolder = new File(downloadPath);
     static ArrayList<ArrayList> usuarios= new ArrayList<>();
+    
     public static void main(String[] args) throws IOException {
         //Lee todos los archivos de la carpeta del servidor la primera vez
-        downloadPath="hola";
         findAllFilesInFolder(downloadFolder);
         int fileId = archivo.get(archivo.size()-1).getId();
         // Crea un server socket donde el servidor esperara requests.
