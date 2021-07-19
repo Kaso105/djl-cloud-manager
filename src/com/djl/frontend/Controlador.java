@@ -25,7 +25,6 @@ public class Controlador
     final String host="localhost";
     final int port=2069;
     File ultimaCarpeta;
-
     public Controlador() {
         this.ultimaCarpeta = new File("");
     }
@@ -63,6 +62,7 @@ public class Controlador
                 Socket socket = new Socket(host, port);
                 // Crea un output stream para escribir al servidor a traves del socket 
                 DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
+                dataOutputStream.writeInt(0); //Envia la instruccion de recibir el archivo
                 // Toma el nombre del archivo a mandar y lo guardalo en fileName
                 String fileName = fileToSend[0].getName();
                 // Convierte el nombre del archivo en un array de bytes para mandarlo al servidor.
@@ -85,28 +85,35 @@ public class Controlador
     
     public DefaultTableModel update(JTable tabla1) throws IOException, ClassNotFoundException{
         ArrayList<Archivo> lista=new ArrayList();
-        String comando="solicitarLista";
         DefaultTableModel tabla2=new DefaultTableModel();
         DecimalFormat formato1= new DecimalFormat("#.00");
         tabla2=(DefaultTableModel) tabla1.getModel();
-        byte[] size=comando.getBytes();
         try{
             Socket socket = new Socket(host, port);
             
             try (DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream())) {
-                dataOutputStream.writeInt(size.length);
-                dataOutputStream.write(size);
+                dataOutputStream.writeInt(1);
                 dataOutputStream.flush();
                 dataOutputStream.close();
             }
-            lista=read();
+            
+            ServerSocket serverSocket1 = new ServerSocket(2070);
+            try{
+                Socket socket1 = serverSocket1.accept();
+                InputStream in = socket1.getInputStream();
+                ObjectInputStream input = new ObjectInputStream(in);
+                lista=(ArrayList<Archivo>)input.readObject();
+                in.close();
+                serverSocket1.close();   
+            }
+       
+            catch(IOException e) {}
             tabla2.setRowCount(0);
             for(Archivo x:lista){
                 tabla2.addRow(new Object[]{
                     x.getName(),
                     formato1.format((float)x.getSize()/1024)+"KB",
                     x.getType(),
-                    x.getUser(),
                 });
             }
             socket.close();
@@ -115,17 +122,16 @@ public class Controlador
         return tabla2;
     }
     public void eliminar(String fileName){
-        comando("eliminarArchivo",fileName);
+        comando(2,fileName);
     }
     
-    public void comando(String comando,String fileName){
-        byte[] comandoBytes=comando.getBytes();
+    public void comando(int instruccion,String fileName){
+        
         try{
             Socket socket = new Socket(host, port);
             
             try (DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream())) {
-                dataOutputStream.writeInt(comandoBytes.length);
-                dataOutputStream.write(comandoBytes);
+                dataOutputStream.writeInt(instruccion);
                 dataOutputStream.writeUTF(fileName);
                 dataOutputStream.flush();
                 dataOutputStream.close();
@@ -134,7 +140,7 @@ public class Controlador
     }
     
     public void descargarArchivo(String nombre) throws IOException{
-        comando("descargar",nombre);
+        comando(3,nombre);
         ServerSocket serverSocket = new ServerSocket(2070);
         Socket socket = serverSocket.accept();
         DataInputStream input = new DataInputStream(socket.getInputStream());
@@ -160,21 +166,6 @@ public class Controlador
         socket.close();
         serverSocket.close();
     }
-    public ArrayList<Archivo> read() throws IOException, ClassNotFoundException{
-        ArrayList<Archivo> lista=new ArrayList<>();
-        ServerSocket serverSocket1 = new ServerSocket(2070);
-            try{
-                Socket socket1 = serverSocket1.accept();
-                InputStream in = socket1.getInputStream();
-                ObjectInputStream input = new ObjectInputStream(in);
-                lista=(ArrayList<Archivo>)input.readObject();
-                in.close();
-                serverSocket1.close();   
-            }
-       
-            catch(IOException e) {}
-        
-        return lista;
-    }
+    
 
 }

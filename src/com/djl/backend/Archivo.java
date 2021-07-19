@@ -9,13 +9,11 @@ public class Archivo implements Serializable {
     private String name;
     private float size;
     private String type;
-    private String user;
 
-    public Archivo(int id, String name,float size, String type, String user){
+    public Archivo(int id, String name,float size, String type){
         this.name = name;
         this.size = size;
         this.type = type;
-        this.user = user;
     }
 
     public Archivo() {
@@ -39,11 +37,6 @@ public class Archivo implements Serializable {
     public String getType() {
         return type;
     }
-
-    public String getUser() {
-        return user;
-    }
-
     
     // Setters
     public void setId(int id) {
@@ -62,8 +55,5 @@ public class Archivo implements Serializable {
         this.type = type;
     }
 
-    public void setUser(String user) {
-        this.user = user;
-    }
 
 }

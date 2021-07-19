@@ -20,11 +20,14 @@ public class Server {
     // Array list para guardar informacion sobre los archivos que se reciben
     static ArrayList<Archivo> archivo = new ArrayList<>();
     static String downloadPath = System.getProperty("user.dir")+"\\Download";
-    static File downloadFolder = new File(downloadPath);
-    static ArrayList<ArrayList> usuarios= new ArrayList<>();
+    static File downloadFolder;
+    static ArrayList<Usuario> usuarios= new ArrayList<>();
     
+    static Usuario juan=new Usuario();
     public static void main(String[] args) throws IOException {
         //Lee todos los archivos de la carpeta del servidor la primera vez
+        juan.setUserName("Daniel");
+        findUserFolder(new File(downloadPath));
         findAllFilesInFolder(downloadFolder);
         int fileId = archivo.get(archivo.size()-1).getId();
         // Crea un server socket donde el servidor esperara requests.
@@ -41,33 +44,36 @@ public class Server {
 
                 // Stream para recibir data del cliente a traves del socket.
                 DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
-
-                // Leer el tamaño del nombre del archivo para saber cuando parar de leer.
-                int fileNameLength = dataInputStream.readInt();
-                
-                // Si el archivo existe.
-                if (fileNameLength > 0) {
+                int instruccion=dataInputStream.readInt();
+                switch(instruccion){
+                    case 1:
+                        enviarLista();
+                        break;
+                    case 2:
+                        eliminar(dataInputStream.readUTF());
+                        break;
+                    case 3:
+                        compartirArchivo(dataInputStream.readUTF());
+                        break;
+                    default:
+                        // Leer el tamaño del nombre del archivo para saber cuando parar de leer.
+                    int fileNameLength = dataInputStream.readInt();
+                    // Si el archivo existe.
+                    if (fileNameLength > 0) {
                     // Byte array para guardar el nombre del archivo.
                     byte[] fileNameBytes = new byte[fileNameLength];     
                     // Lee desde el input stream hacia el byte array.
                     dataInputStream.readFully(fileNameBytes, 0, fileNameBytes.length);
                     // Crea el nombre del archivo desde el array de bytes.
                     String fileName = new String(fileNameBytes);
-                    //enviar la lista de archivos que estan en el servidor
-                    boolean exist=false;
+                    
+                    boolean exist=false; //verifica si ya existe ese archivo
                     for(Archivo x:archivo){
                         if(x.getName().equals(fileName))
                             exist=true;
                     }
                     if(!exist){
-                        if(fileName.equals("solicitarLista")){
-                            enviarLista();
-                        }else if(fileName.equals("eliminarArchivo")){
-                            String nombreArchivo=dataInputStream.readUTF();
-                            eliminar(nombreArchivo);
-                        }else if(fileName.equals("descargar")){
-                            compartirArchivo(dataInputStream.readUTF());
-                        }
+                        
                         // Lee cuanda data esperar del contenido en si del archivo.
                         int fileContentLength = dataInputStream.readInt();
 
@@ -78,16 +84,18 @@ public class Server {
                             // Lee del input stream hacia el array de fileContentBytes.
                             dataInputStream.readFully(fileContentBytes, 0, fileContentBytes.length);
                             // Añade el nuevo file al ArrayList que contiene todo nuestra data.
-                            archivo.add(new Archivo(fileId, fileName, fileContentLength, getFileExtension(fileName), "drewAn"));
+                            archivo.add(new Archivo(fileId, fileName, fileContentLength, getFileExtension(fileName)));
                             // Incrementa el fileId para el siguiente Archivo a ser recibido.
                             fileId++;
 
                             guardarArchivo(fileName,fileContentBytes);
                             enviarLista();
+                            }
                         }
                     }
-                }
-            } catch (IOException e) {}
+                } 
+            }catch (IOException e) {}
+                
         }
     }
 
@@ -107,11 +115,24 @@ public class Server {
             return "Extension no encontrada.";
         }
     }
+    public static void findUserFolder(File folder){
+        int i=1;
+		for (File file : folder.listFiles()) {
+			if (file.isDirectory()) {
+                                if(juan.getUserName().equals(file.getName())){
+                                    downloadFolder=file;
+                                }
+                                i++;
+			} else {
+				findAllFilesInFolder(file);
+			}
+		}
+    }
     public static void findAllFilesInFolder(File folder) {
         int i=1;
 		for (File file : folder.listFiles()) {
 			if (!file.isDirectory()) {
-                                Archivo newArchivo= new Archivo(i,file.getName(),(float)file.length(),getFileExtension(file.getName()),"daniel");
+                                Archivo newArchivo= new Archivo(i,file.getName(),(float)file.length(),getFileExtension(file.getName()));
                                 archivo.add(newArchivo);
                                 i++;
 			} else {
