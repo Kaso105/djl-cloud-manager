@@ -201,21 +201,26 @@ public class Server {
         dataOut.close();
     }
     
-    public static void registrarUsuario(String nombreYpassword){
+    public static void registrarUsuario(String nombreYpassword) throws IOException{
         String[] user=nombreYpassword.split("`");
-        String respuesta=null;
+        String respuesta="";
         for(Usuario x:usuarios){
             if(x.getUserName().equals(user[0])){
                 respuesta="Usuario ya existe";
             }
         }
-        if(respuesta==null){
+        if(respuesta.equals("")){
             File carpeta =new File(System.getProperty("user.dir")+"\\Download"+"\\"+user[0]);
             carpeta.mkdir();
             juan=new Usuario(user[0],user[1]);
             usuarios.add(juan);
             downloadFolder=carpeta;
         }
+        Socket socket1 = new Socket("localhost", 2070);
+        DataOutputStream dataOut=new DataOutputStream(socket1.getOutputStream());
+        dataOut.writeUTF(respuesta);
+        dataOut.flush();
+        dataOut.close();
     }
     
     public static void eliminar(String nombre){
