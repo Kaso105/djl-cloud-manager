@@ -125,11 +125,13 @@ public class Controlador
         comando(2,fileName);
     }
     
-    public void enviarUsuario(String userName,String password) throws IOException{
+    public void enviarUsuario(String userName,String password,int instruccion) throws IOException{
         String unido=userName+"`"+password;
-        comando(4,unido);
-        String respuesta;
         
+        comando(instruccion,unido); //instruccion manda lo que deseemos realizar(registrar usuario o iniciar sesion), como vamos a enviar los mismos datos, solo cambiaremos lo que el server haga con ellos
+        //si instruccion==4 inicia sesion, si instruccion ==5 el servidor registra al usuario
+        
+        String respuesta;
         ServerSocket serverSocket = new ServerSocket(2070);
         Socket socket = serverSocket.accept();
         DataInputStream input = new DataInputStream(socket.getInputStream());
@@ -138,9 +140,15 @@ public class Controlador
             case "usuario no existe":
                 
                 break;
+                
             case "invalid password":
                 
                 break;
+                
+            case "Usuario ya existe":
+                
+                break;
+                
             default:
                 
                 break;

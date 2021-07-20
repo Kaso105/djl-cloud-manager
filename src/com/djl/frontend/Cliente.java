@@ -11,11 +11,12 @@ public class Cliente extends javax.swing.JFrame {
     
     Controlador control;
     ArrayList<Archivo> archivos=new ArrayList<Archivo>();
-    
     public Cliente() throws IOException {
         initComponents();
         control = new Controlador();
-        actualizarTabla();
+        Inicio.setSize(600, 600);
+        Inicio.setVisible(true);
+        
     }
 
 
@@ -26,7 +27,14 @@ public class Cliente extends javax.swing.JFrame {
         jPopupMenu1 = new javax.swing.JPopupMenu();
         BorrarArchivo = new javax.swing.JMenuItem();
         DescargarArchivo = new javax.swing.JMenuItem();
-        jFrame1 = new javax.swing.JFrame();
+        Inicio = new javax.swing.JFrame();
+        LABLE = new java.awt.Label();
+        Contrasena = new java.awt.TextField();
+        userName = new java.awt.TextField();
+        label1 = new java.awt.Label();
+        label2 = new java.awt.Label();
+        Registrar = new java.awt.Button();
+        InicioSesion = new java.awt.Button();
         tabOptions = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         btnCreate = new javax.swing.JButton();
@@ -55,17 +63,100 @@ public class Cliente extends javax.swing.JFrame {
         });
         jPopupMenu1.add(DescargarArchivo);
 
-        jFrame1.setBackground(new java.awt.Color(153, 255, 153));
+        Inicio.setTitle("Inicio de sesion");
+        Inicio.setAlwaysOnTop(true);
+        Inicio.setBackground(new java.awt.Color(153, 255, 153));
+        Inicio.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                InicioWindowOpened(evt);
+            }
+        });
 
-        javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
-        jFrame1.getContentPane().setLayout(jFrame1Layout);
-        jFrame1Layout.setHorizontalGroup(
-            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 847, Short.MAX_VALUE)
+        LABLE.setAlignment(java.awt.Label.CENTER);
+        LABLE.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        LABLE.setText("Inicio de sesion");
+
+        Contrasena.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ContrasenaActionPerformed(evt);
+            }
+        });
+
+        userName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                userNameActionPerformed(evt);
+            }
+        });
+
+        label1.setText("Usuario");
+
+        label2.setText("Contraseña");
+
+        Registrar.setLabel("Registrar");
+        Registrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RegistrarActionPerformed(evt);
+            }
+        });
+
+        InicioSesion.setLabel("Iniciar sesion");
+        InicioSesion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                InicioSesionActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout InicioLayout = new javax.swing.GroupLayout(Inicio.getContentPane());
+        Inicio.getContentPane().setLayout(InicioLayout);
+        InicioLayout.setHorizontalGroup(
+            InicioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(InicioLayout.createSequentialGroup()
+                .addGroup(InicioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(InicioLayout.createSequentialGroup()
+                        .addGap(63, 63, 63)
+                        .addGroup(InicioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(InicioLayout.createSequentialGroup()
+                                .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(74, 74, 74)
+                                .addComponent(Contrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(InicioLayout.createSequentialGroup()
+                        .addGap(214, 214, 214)
+                        .addComponent(LABLE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(InicioLayout.createSequentialGroup()
+                        .addGap(153, 153, 153)
+                        .addComponent(Registrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(91, 91, 91)
+                        .addComponent(InicioSesion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(156, Short.MAX_VALUE))
+            .addGroup(InicioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(InicioLayout.createSequentialGroup()
+                    .addGap(205, 205, 205)
+                    .addComponent(userName, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(207, Short.MAX_VALUE)))
         );
-        jFrame1Layout.setVerticalGroup(
-            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 596, Short.MAX_VALUE)
+        InicioLayout.setVerticalGroup(
+            InicioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(InicioLayout.createSequentialGroup()
+                .addGap(101, 101, 101)
+                .addComponent(LABLE, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(66, 66, 66)
+                .addGroup(InicioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(InicioLayout.createSequentialGroup()
+                        .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(39, 39, 39)
+                        .addComponent(Contrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(81, 81, 81)
+                .addGroup(InicioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(Registrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(InicioSesion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(154, Short.MAX_VALUE))
+            .addGroup(InicioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(InicioLayout.createSequentialGroup()
+                    .addGap(190, 190, 190)
+                    .addComponent(userName, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(323, Short.MAX_VALUE)))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -255,6 +346,36 @@ public class Cliente extends javax.swing.JFrame {
             Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_DescargarArchivoActionPerformed
+
+    private void userNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_userNameActionPerformed
+
+    private void InicioSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InicioSesionActionPerformed
+        try {
+            // TODO add your handling code here:
+            control.enviarUsuario(userName.getText(), Contrasena.getText(), 4);
+        } catch (IOException ex) {
+            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_InicioSesionActionPerformed
+
+    private void ContrasenaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ContrasenaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ContrasenaActionPerformed
+
+    private void RegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegistrarActionPerformed
+        try {
+            // TODO add your handling code here:
+            control.enviarUsuario(userName.getText(), Contrasena.getText(), 5);
+        } catch (IOException ex) {
+            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_RegistrarActionPerformed
+
+    private void InicioWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_InicioWindowOpened
+        // TODO add your handling code here:
+    }//GEN-LAST:event_InicioWindowOpened
     private void actualizarTabla(){
         try {
             DefaultTableModel tabla = control.update(tblDoc);
@@ -300,19 +421,26 @@ public class Cliente extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem BorrarArchivo;
+    private java.awt.TextField Contrasena;
     private javax.swing.JMenuItem DescargarArchivo;
+    private javax.swing.JFrame Inicio;
+    private java.awt.Button InicioSesion;
+    private java.awt.Label LABLE;
+    private java.awt.Button Registrar;
     private javax.swing.JButton btnChooseCreate;
     private javax.swing.JButton btnCreate;
-    private javax.swing.JFrame jFrame1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private java.awt.Label label1;
+    private java.awt.Label label2;
     private javax.swing.JLabel lblFileStatusC;
     private javax.swing.JLabel lblUsr;
     private javax.swing.JTabbedPane tabOptions;
     private javax.swing.JTable tblDoc;
     private javax.swing.JTable tblUsr;
+    private java.awt.TextField userName;
     // End of variables declaration//GEN-END:variables
 }

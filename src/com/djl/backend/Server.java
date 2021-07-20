@@ -29,12 +29,7 @@ public class Server {
     
     public static void main(String[] args) throws IOException {
         leerRegistro();
-        juan=usuarios.get(0);
-        downloadPath+="\\"+juan.getUserName();
-        downloadFolder=new File(downloadPath);
-        findUserFolder(downloadFolder);
-        findAllFilesInFolder(downloadFolder);
-        int fileId = archivo.get(archivo.size()-1).getId();
+        int fileId=0;
         // Crea un server socket donde el servidor esperara requests.
         ServerSocket serverSocket = new ServerSocket(2069);
         //Obtiene los datos del server para actualizarlos al cliente
@@ -62,6 +57,18 @@ public class Server {
                         break;
                     case 4:
                         verificarUsuario(dataInputStream.readUTF());
+                        downloadFolder=new File(downloadPath);
+                        findUserFolder(downloadFolder);
+                        findAllFilesInFolder(downloadFolder);
+                        fileId = archivo.get(archivo.size()-1).getId();
+                        break;
+                    case 5:
+                        registrarUsuario(dataInputStream.readUTF());
+                        downloadFolder=new File(downloadPath);
+                        findUserFolder(downloadFolder);
+                        findAllFilesInFolder(downloadFolder);
+                        fileId = archivo.get(archivo.size()-1).getId();
+                        break;
                     default:
                         // Leer el tamaño del nombre del archivo para saber cuando parar de leer.
                     int fileNameLength = dataInputStream.readInt();
@@ -173,15 +180,35 @@ public class Server {
     
     public static void verificarUsuario(String nombreYpassword){
         String[] user=nombreYpassword.split("`");
-        String respuesta;
+        String respuesta="";
         for(Usuario x:usuarios){
             if(x.getUserName().equals(user[0])){
-                if(x.getPassword().equals(user[1]))
+                if(x.getPassword().equals(user[1])){
                     respuesta="todo fino, adelante";
+                    downloadFolder=new File(downloadPath+"\\"+user[0]);
+                    juan=x;
+                }
                 else
                     respuesta="invalid password";
             }else
                 respuesta="usuario no existe";
+        }
+    }
+    
+    public static void registrarUsuario(String nombreYpassword){
+        String[] user=nombreYpassword.split("`");
+        String respuesta=null;
+        for(Usuario x:usuarios){
+            if(x.getUserName().equals(user[0])){
+                respuesta="Usuario ya existe";
+            }
+        }
+        if(respuesta==null){
+            File carpeta =new File(System.getProperty("user.dir")+"\\Download"+"\\"+user[0]);
+            carpeta.mkdir();
+            juan=new Usuario(user[0],user[1]);
+            usuarios.add(juan);
+            downloadFolder=carpeta;
         }
     }
     
@@ -195,6 +222,7 @@ public class Server {
         File del=new File(downloadPath+"\\"+nombre);
         del.delete();
     }
+    
     public static void compartirArchivo(String nombre) throws FileNotFoundException, IOException{
         File file=new File(downloadPath+"\\"+nombre);
         DataOutputStream output;
