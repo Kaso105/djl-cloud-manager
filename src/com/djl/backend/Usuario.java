@@ -14,19 +14,13 @@ import java.util.ArrayList;
 public class Usuario {
     private String password;
     private String userName;
-    private ArrayList<Archivo> archivos;
     
-    public Usuario(String password,String userName,ArrayList<Archivo> archivos){
+    public Usuario(String userName,String password){
         this.password=password;
         this.userName=userName;
-        this.archivos=archivos;
     }
 
     public Usuario() {
-    }
-
-    public void setArchivos(ArrayList<Archivo> archivos) {
-        this.archivos = archivos;
     }
 
     public String getPassword() {
@@ -45,8 +39,5 @@ public class Usuario {
         this.userName = userName;
     }
     
-    public ArrayList<Archivo> getArchivos() {
-        return archivos;
-    }
     
 }

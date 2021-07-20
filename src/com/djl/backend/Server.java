@@ -1,13 +1,14 @@
 
 package com.djl.backend;
 
-import java.util.List;
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
@@ -16,18 +17,19 @@ import java.util.ArrayList;
 
 public class Server {
     
-   
     // Array list para guardar informacion sobre los archivos que se reciben
     static ArrayList<Archivo> archivo = new ArrayList<>();
     static String downloadPath = System.getProperty("user.dir")+"\\Download";
     static File downloadFolder;
     static ArrayList<Usuario> usuarios= new ArrayList<>();
+    static Usuario juan;
     
-    static Usuario juan=new Usuario();
     public static void main(String[] args) throws IOException {
-        //Lee todos los archivos de la carpeta del servidor la primera vez
-        juan.setUserName("Daniel");
-        findUserFolder(new File(downloadPath));
+        leerArchivo();
+        juan=usuarios.get(0);
+        downloadPath+="\\"+juan.getUserName();
+        downloadFolder=new File(downloadPath);
+        findUserFolder(downloadFolder);
         findAllFilesInFolder(downloadFolder);
         int fileId = archivo.get(archivo.size()-1).getId();
         // Crea un server socket donde el servidor esperara requests.
@@ -115,19 +117,20 @@ public class Server {
             return "Extension no encontrada.";
         }
     }
+    
     public static void findUserFolder(File folder){
         int i=1;
 		for (File file : folder.listFiles()) {
 			if (file.isDirectory()) {
                                 if(juan.getUserName().equals(file.getName())){
                                     downloadFolder=file;
+                                    return;
                                 }
                                 i++;
-			} else {
-				findAllFilesInFolder(file);
 			}
 		}
     }
+    
     public static void findAllFilesInFolder(File folder) {
         int i=1;
 		for (File file : folder.listFiles()) {
@@ -162,6 +165,11 @@ public class Server {
         dataOut.close();
         
     }
+    
+    public static void verificarUsuario(String nombre, String password){
+        
+    }
+    
     public static void eliminar(String nombre){
         for(Archivo x:archivo){
             if(x.getName().equals(nombre)){
@@ -175,6 +183,7 @@ public class Server {
     public static void compartirArchivo(String nombre) throws FileNotFoundException, IOException{
         File file=new File(downloadPath+"\\"+nombre);
         DataOutputStream output;
+        System.out.println(nombre);
         try (FileInputStream input = new FileInputStream(file)) {
             Socket socket1 = new Socket("localhost", 2070);
             output = new DataOutputStream(socket1.getOutputStream());
@@ -186,5 +195,27 @@ public class Server {
         output.flush();
         output.close();
     }
-    
+    public static void leerArchivo() throws IOException{
+        File archivo = null;
+        FileReader fr = null;
+        BufferedReader br = null;
+
+      try {
+         // Apertura del fichero y creacion de BufferedReader para poder
+         // hacer una lectura comoda (disponer del metodo readLine()).
+         archivo = new File ("registro.txt");
+         fr = new FileReader (archivo);
+         br = new BufferedReader(fr);
+         // Lectura del fichero
+         String linea;
+         while((linea=br.readLine())!=null){
+                String nombre=linea;
+                linea=br.readLine();
+                String password=linea;
+                Usuario x = new Usuario(nombre, password);
+                usuarios.add(x);
+         }
+      }
+      catch(IOException | NumberFormatException e){}
+    }
 }

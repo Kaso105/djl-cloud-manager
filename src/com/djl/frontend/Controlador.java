@@ -142,7 +142,9 @@ public class Controlador
     public void descargarArchivo(String nombre) throws IOException{
         comando(3,nombre);
         ServerSocket serverSocket = new ServerSocket(2070);
+        
         Socket socket = serverSocket.accept();
+        System.out.println("Hola");
         DataInputStream input = new DataInputStream(socket.getInputStream());
         JFileChooser carpeta = new JFileChooser();
         carpeta.setDialogTitle("Seleccione la ubicación de descarga");
