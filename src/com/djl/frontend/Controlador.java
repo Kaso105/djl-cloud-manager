@@ -125,7 +125,7 @@ public class Controlador
         comando(2,fileName);
     }
     
-    public void enviarUsuario(String userName,String password,int instruccion) throws IOException{
+    public boolean enviarUsuario(String userName,String password,int instruccion) throws IOException{
         String unido=userName+"`"+password;
         
         comando(instruccion,unido); //instruccion manda lo que deseemos realizar(registrar usuario o iniciar sesion), como vamos a enviar los mismos datos, solo cambiaremos lo que el server haga con ellos
@@ -136,6 +136,8 @@ public class Controlador
         Socket socket = serverSocket.accept();
         DataInputStream input = new DataInputStream(socket.getInputStream());
         respuesta=input.readUTF();
+        serverSocket.close();
+        input.close();
         switch(respuesta){
             case "usuario no existe":
                 
@@ -150,10 +152,10 @@ public class Controlador
                 break;
                 
             default:
-                
-                break;
+                System.out.println("Todo fino, adelante");
+                return true;
         }
-
+        return false;
     }
     public void comando(int instruccion,String fileName){
         

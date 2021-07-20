@@ -178,9 +178,10 @@ public class Server {
         
     }
     
-    public static void verificarUsuario(String nombreYpassword){
+    public static void verificarUsuario(String nombreYpassword) throws IOException{
         String[] user=nombreYpassword.split("`");
         String respuesta="";
+        System.out.println(user[0]);
         for(Usuario x:usuarios){
             if(x.getUserName().equals(user[0])){
                 if(x.getPassword().equals(user[1])){
@@ -193,6 +194,11 @@ public class Server {
             }else
                 respuesta="usuario no existe";
         }
+        Socket socket1 = new Socket("localhost", 2070);
+        DataOutputStream dataOut=new DataOutputStream(socket1.getOutputStream());
+        dataOut.writeUTF(respuesta);
+        dataOut.flush();
+        dataOut.close();
     }
     
     public static void registrarUsuario(String nombreYpassword){

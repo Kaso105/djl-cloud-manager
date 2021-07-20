@@ -354,7 +354,8 @@ public class Cliente extends javax.swing.JFrame {
     private void InicioSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InicioSesionActionPerformed
         try {
             // TODO add your handling code here:
-            control.enviarUsuario(userName.getText(), Contrasena.getText(), 4);
+            if(control.enviarUsuario(userName.getText(), Contrasena.getText(), 4))
+                actualizarTabla();
         } catch (IOException ex) {
             Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
         }
