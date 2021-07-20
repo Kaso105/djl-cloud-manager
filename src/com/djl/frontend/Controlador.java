@@ -125,6 +125,28 @@ public class Controlador
         comando(2,fileName);
     }
     
+    public void enviarUsuario(String userName,String password) throws IOException{
+        String unido=userName+"`"+password;
+        comando(4,unido);
+        String respuesta;
+        
+        ServerSocket serverSocket = new ServerSocket(2070);
+        Socket socket = serverSocket.accept();
+        DataInputStream input = new DataInputStream(socket.getInputStream());
+        respuesta=input.readUTF();
+        switch(respuesta){
+            case "usuario no existe":
+                
+                break;
+            case "invalid password":
+                
+                break;
+            default:
+                
+                break;
+        }
+
+    }
     public void comando(int instruccion,String fileName){
         
         try{
@@ -144,7 +166,6 @@ public class Controlador
         ServerSocket serverSocket = new ServerSocket(2070);
         
         Socket socket = serverSocket.accept();
-        System.out.println("Hola");
         DataInputStream input = new DataInputStream(socket.getInputStream());
         JFileChooser carpeta = new JFileChooser();
         carpeta.setDialogTitle("Seleccione la ubicación de descarga");

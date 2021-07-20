@@ -9,11 +9,14 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Server {
     
@@ -25,7 +28,7 @@ public class Server {
     static Usuario juan;
     
     public static void main(String[] args) throws IOException {
-        leerArchivo();
+        leerRegistro();
         juan=usuarios.get(0);
         downloadPath+="\\"+juan.getUserName();
         downloadFolder=new File(downloadPath);
@@ -57,6 +60,8 @@ public class Server {
                     case 3:
                         compartirArchivo(dataInputStream.readUTF());
                         break;
+                    case 4:
+                        verificarUsuario(dataInputStream.readUTF());
                     default:
                         // Leer el tamaño del nombre del archivo para saber cuando parar de leer.
                     int fileNameLength = dataInputStream.readInt();
@@ -166,8 +171,18 @@ public class Server {
         
     }
     
-    public static void verificarUsuario(String nombre, String password){
-        
+    public static void verificarUsuario(String nombreYpassword){
+        String[] user=nombreYpassword.split("`");
+        String respuesta;
+        for(Usuario x:usuarios){
+            if(x.getUserName().equals(user[0])){
+                if(x.getPassword().equals(user[1]))
+                    respuesta="todo fino, adelante";
+                else
+                    respuesta="invalid password";
+            }else
+                respuesta="usuario no existe";
+        }
     }
     
     public static void eliminar(String nombre){
@@ -195,7 +210,7 @@ public class Server {
         output.flush();
         output.close();
     }
-    public static void leerArchivo() throws IOException{
+    public static void leerRegistro() throws IOException{
         File archivo = null;
         FileReader fr = null;
         BufferedReader br = null;
@@ -217,5 +232,19 @@ public class Server {
          }
       }
       catch(IOException | NumberFormatException e){}
+    }
+    
+    public void escribirRegistro(){
+        FileWriter fichero = null;
+        PrintWriter pw = null;
+        try
+        {
+            fichero = new FileWriter("registro.txt");
+            pw = new PrintWriter(fichero);
+            
+            for(Usuario x:usuarios) 
+                    pw.println(x.getUserName()+"\n"+x.getPassword()+"\n");
+                    
+        }catch(IOException e){}
     }
 }
