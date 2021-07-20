@@ -56,11 +56,11 @@ public class Server {
                         compartirArchivo(dataInputStream.readUTF());
                         break;
                     case 4:
-                        verificarUsuario(dataInputStream.readUTF());
+                        if(verificarUsuario(dataInputStream.readUTF())){
                         downloadFolder=new File(downloadPath);
                         findUserFolder(downloadFolder);
                         findAllFilesInFolder(downloadFolder);
-                        fileId = archivo.get(archivo.size()-1).getId();
+                        fileId = archivo.get(archivo.size()-1).getId();}
                         break;
                     case 5:
                         registrarUsuario(dataInputStream.readUTF());
@@ -178,16 +178,18 @@ public class Server {
         
     }
     
-    public static void verificarUsuario(String nombreYpassword) throws IOException{
+    public static boolean verificarUsuario(String nombreYpassword) throws IOException{
         String[] user=nombreYpassword.split("`");
         String respuesta="";
         System.out.println(user[0]);
+        boolean bool=false;
         for(Usuario x:usuarios){
             if(x.getUserName().equals(user[0])){
                 if(x.getPassword().equals(user[1])){
                     respuesta="todo fino, adelante";
                     downloadFolder=new File(downloadPath+"\\"+user[0]);
                     juan=x;
+                    bool=true;
                 }
                 else
                     respuesta="invalid password";
@@ -199,6 +201,7 @@ public class Server {
         dataOut.writeUTF(respuesta);
         dataOut.flush();
         dataOut.close();
+        return bool;
     }
     
     public static void registrarUsuario(String nombreYpassword) throws IOException{
