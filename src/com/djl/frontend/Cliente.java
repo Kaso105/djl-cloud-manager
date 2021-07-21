@@ -40,12 +40,10 @@ public class Cliente extends javax.swing.JFrame {
         btnCreate = new javax.swing.JButton();
         btnChooseCreate = new javax.swing.JButton();
         lblFileStatusC = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblUsr = new javax.swing.JTable();
-        lblUsr = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblDoc = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
+        button1 = new java.awt.Button();
 
         BorrarArchivo.setText("Eliminar archivo");
         BorrarArchivo.addActionListener(new java.awt.event.ActionListener() {
@@ -212,30 +210,6 @@ public class Cliente extends javax.swing.JFrame {
 
         tabOptions.addTab("Subir", jPanel1);
 
-        tblUsr.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "ID", "Usuario", "Permiso", "Últ. sesión"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
-        jScrollPane1.setViewportView(tblUsr);
-
-        lblUsr.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        lblUsr.setText("USUARIOS DEL SISTEMA");
-
         tblDoc = new javax.swing.JTable(){
             public boolean isCellEditable(int rowIndex, int colIndex){
                 return false;
@@ -266,38 +240,38 @@ public class Cliente extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setText("DOCUMENTOS ");
 
+        button1.setLabel("Cerrar sesion");
+        button1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addContainerGap()
+                .addComponent(tabOptions, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(586, 586, 586)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblUsr)
-                                .addGap(230, 230, 230))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(tabOptions, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(587, 587, 587))
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 722, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(jLabel1)
+                        .addGap(587, 587, 587))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 722, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(60, 60, 60))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(45, 45, 45)
-                .addComponent(lblUsr)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(35, 35, 35)
+                .addGap(75, 75, 75)
+                .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(107, 107, 107)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
@@ -381,6 +355,16 @@ public class Cliente extends javax.swing.JFrame {
     private void InicioWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_InicioWindowOpened
         // TODO add your handling code here:
     }//GEN-LAST:event_InicioWindowOpened
+
+    private void button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button1ActionPerformed
+        // TODO add your handling code here:
+        
+        DefaultTableModel tabla=(DefaultTableModel) tblDoc.getModel();
+        tabla.setRowCount(0);
+        userName.setText("");
+        Contrasena.setText("");
+        Inicio.setVisible(true);
+    }//GEN-LAST:event_button1ActionPerformed
     private void actualizarTabla(){
         System.out.println("actualizada");
         try {
@@ -435,18 +419,16 @@ public class Cliente extends javax.swing.JFrame {
     private java.awt.Button Registrar;
     private javax.swing.JButton btnChooseCreate;
     private javax.swing.JButton btnCreate;
+    private java.awt.Button button1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPopupMenu jPopupMenu1;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private java.awt.Label label1;
     private java.awt.Label label2;
     private javax.swing.JLabel lblFileStatusC;
-    private javax.swing.JLabel lblUsr;
     private javax.swing.JTabbedPane tabOptions;
     private javax.swing.JTable tblDoc;
-    private javax.swing.JTable tblUsr;
     private java.awt.TextField userName;
     // End of variables declaration//GEN-END:variables
 }
