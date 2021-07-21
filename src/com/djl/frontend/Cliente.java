@@ -13,6 +13,8 @@ public class Cliente extends javax.swing.JFrame {
     ArrayList<Archivo> archivos=new ArrayList<Archivo>();
     public Cliente() throws IOException {
         initComponents();
+        this.setLocationRelativeTo(null);
+        Inicio.setLocationRelativeTo(null);
         labelUser.setText("Waiting...");
         control = new Controlador();
         Inicio.setSize(600, 600);
@@ -64,6 +66,7 @@ public class Cliente extends javax.swing.JFrame {
         });
         jPopupMenu1.add(DescargarArchivo);
 
+        Inicio.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         Inicio.setTitle("Inicio de sesion");
         Inicio.setBackground(new java.awt.Color(153, 255, 153));
         Inicio.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -280,7 +283,7 @@ public class Cliente extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(labelUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tabOptions, javax.swing.GroupLayout.DEFAULT_SIZE, 402, Short.MAX_VALUE))
+                        .addComponent(tabOptions))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(206, 206, 206)
                         .addComponent(jLabel1)
