@@ -1,2 +1,6 @@
 Daniel
-123456
+12345
+Juan
+juan
+josefa
+123

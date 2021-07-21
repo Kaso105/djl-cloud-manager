@@ -354,8 +354,10 @@ public class Cliente extends javax.swing.JFrame {
     private void InicioSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InicioSesionActionPerformed
         try {
             // TODO add your handling code here:
-            if(control.enviarUsuario(userName.getText(), Contrasena.getText(), 4))
+            if(control.enviarUsuario(userName.getText(), Contrasena.getText(), 4)){
                 actualizarTabla();
+                Inicio.dispose();
+            }
         } catch (IOException ex) {
             Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -368,7 +370,10 @@ public class Cliente extends javax.swing.JFrame {
     private void RegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegistrarActionPerformed
         try {
             // TODO add your handling code here:
-            control.enviarUsuario(userName.getText(), Contrasena.getText(), 5);
+            if(control.enviarUsuario(userName.getText(), Contrasena.getText(), 5)){
+                Inicio.dispose();
+                actualizarTabla();
+            }
         } catch (IOException ex) {
             Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -378,6 +383,7 @@ public class Cliente extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_InicioWindowOpened
     private void actualizarTabla(){
+        System.out.println("actualizada");
         try {
             DefaultTableModel tabla = control.update(tblDoc);
         } catch (IOException | ClassNotFoundException ex) {

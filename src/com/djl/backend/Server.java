@@ -16,7 +16,6 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class Server {
     
@@ -60,14 +59,16 @@ public class Server {
                         downloadFolder=new File(downloadPath);
                         findUserFolder(downloadFolder);
                         findAllFilesInFolder(downloadFolder);
-                        fileId = archivo.get(archivo.size()-1).getId();}
+                        if(!archivo.isEmpty())
+                            fileId = archivo.get(archivo.size()-1).getId();}
                         break;
                     case 5:
                         registrarUsuario(dataInputStream.readUTF());
                         downloadFolder=new File(downloadPath);
                         findUserFolder(downloadFolder);
                         findAllFilesInFolder(downloadFolder);
-                        fileId = archivo.get(archivo.size()-1).getId();
+                        fileId = 1;
+                        escribirRegistro();
                         break;
                     default:
                         // Leer el tamaño del nombre del archivo para saber cuando parar de leer.
@@ -145,6 +146,7 @@ public class Server {
     
     public static void findAllFilesInFolder(File folder) {
         int i=1;
+        archivo.clear();
 		for (File file : folder.listFiles()) {
 			if (!file.isDirectory()) {
                                 Archivo newArchivo= new Archivo(i,file.getName(),(float)file.length(),getFileExtension(file.getName()));
@@ -184,11 +186,12 @@ public class Server {
         System.out.println(user[0]);
         boolean bool=false;
         for(Usuario x:usuarios){
+            System.out.println(x.getUserName());
             if(x.getUserName().equals(user[0])){
                 if(x.getPassword().equals(user[1])){
                     respuesta="todo fino, adelante";
-                    downloadFolder=new File(downloadPath+"\\"+user[0]);
                     juan=x;
+                    downloadFolder=new File(downloadPath+"\\"+juan.getUserName());
                     bool=true;
                 }
                 else
@@ -276,17 +279,16 @@ public class Server {
       catch(IOException | NumberFormatException e){}
     }
     
-    public void escribirRegistro(){
+    public static void escribirRegistro() throws IOException{
         FileWriter fichero = null;
         PrintWriter pw = null;
-        try
-        {
             fichero = new FileWriter("registro.txt");
             pw = new PrintWriter(fichero);
-            
-            for(Usuario x:usuarios) 
-                    pw.println(x.getUserName()+"\n"+x.getPassword()+"\n");
-                    
-        }catch(IOException e){}
+            for(Usuario x:usuarios){
+                pw.println(x.getUserName()+"\n"+x.getPassword());
+                System.out.println(x.getPassword());
+            }
+            pw.close();
+            fichero.close();
     }
 }
