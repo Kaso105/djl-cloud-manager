@@ -150,15 +150,18 @@ public class Controlador
                 break;
                 
             case "invalid password":
+                JOptionPane.showMessageDialog(null, "La contraseña es incorrecta");
                 break;
                 
             case "Usuario ya existe":
+                JOptionPane.showMessageDialog(null, "Ese usuario ya está registrado");
                 break;
                 
             default:
+                
                 return true;
         }
-        System.out.println(respuesta);
+        
         return false;
     }
     public void comando(int instruccion,String fileName){
