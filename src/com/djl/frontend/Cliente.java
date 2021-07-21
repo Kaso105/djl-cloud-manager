@@ -340,7 +340,6 @@ public class Cliente extends javax.swing.JFrame {
         int index = tblDoc.getSelectedRow();
         try {
             if(index>=0)
-                System.out.println(tblDoc.getValueAt(index, 0).toString());
                 control.descargarArchivo(tblDoc.getValueAt(index, 0).toString());
         } catch (IOException ex) {
             Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);

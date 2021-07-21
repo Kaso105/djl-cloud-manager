@@ -25,6 +25,7 @@ public class Server {
     static File downloadFolder;
     static ArrayList<Usuario> usuarios= new ArrayList<>();
     static Usuario juan;
+    static String carpetaUsuario;
     
     public static void main(String[] args) throws IOException {
         leerRegistro();
@@ -158,7 +159,7 @@ public class Server {
 		}
 	}
     public static void guardarArchivo(String fileName,byte[] data){
-        File fileToDownload = new File(downloadPath+"\\"+fileName);
+        File fileToDownload = new File(carpetaUsuario+"\\"+fileName);
                 try {
                     // Create a stream to write data to the file.
                     FileOutputStream fileOutputStream = new FileOutputStream(fileToDownload);
@@ -183,22 +184,29 @@ public class Server {
     public static boolean verificarUsuario(String nombreYpassword) throws IOException{
         String[] user=nombreYpassword.split("`");
         String respuesta="";
-        System.out.println(user[0]);
+        String pass=user[1].replace("\n", "");
+        pass=pass.replaceAll("\t", "");
+        boolean existeUsuario=false;
+        boolean contrasenaCorrecta=false;
         boolean bool=false;
         for(Usuario x:usuarios){
-            System.out.println(x.getUserName());
             if(x.getUserName().equals(user[0])){
-                if(x.getPassword().equals(user[1])){
+                existeUsuario=true;
+                if(x.getPassword().equals(pass)){
+                    contrasenaCorrecta=true;
                     respuesta="todo fino, adelante";
                     juan=x;
-                    downloadFolder=new File(downloadPath+"\\"+juan.getUserName());
+                    carpetaUsuario=downloadPath+"\\"+juan.getUserName();
+                    downloadFolder=new File(carpetaUsuario);
                     bool=true;
                 }
-                else
-                    respuesta="invalid password";
-            }else
-                respuesta="usuario no existe";
+            }
         }
+        if(!existeUsuario)
+            respuesta="usuario no existe";
+        else if(!contrasenaCorrecta)
+            respuesta="invalid password";
+        
         Socket socket1 = new Socket("localhost", 2070);
         DataOutputStream dataOut=new DataOutputStream(socket1.getOutputStream());
         dataOut.writeUTF(respuesta);
@@ -236,14 +244,13 @@ public class Server {
                 break;
             }
         }
-        File del=new File(downloadPath+"\\"+nombre);
+        File del=new File(carpetaUsuario+"\\"+nombre);
         del.delete();
     }
     
     public static void compartirArchivo(String nombre) throws FileNotFoundException, IOException{
-        File file=new File(downloadPath+"\\"+nombre);
+        File file=new File(carpetaUsuario+"\\"+nombre);
         DataOutputStream output;
-        System.out.println(nombre);
         try (FileInputStream input = new FileInputStream(file)) {
             Socket socket1 = new Socket("localhost", 2070);
             output = new DataOutputStream(socket1.getOutputStream());
@@ -286,7 +293,6 @@ public class Server {
             pw = new PrintWriter(fichero);
             for(Usuario x:usuarios){
                 pw.println(x.getUserName()+"\n"+x.getPassword());
-                System.out.println(x.getPassword());
             }
             pw.close();
             fichero.close();

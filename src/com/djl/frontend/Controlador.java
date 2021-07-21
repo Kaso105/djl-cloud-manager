@@ -140,21 +140,21 @@ public class Controlador
         input.close();
         switch(respuesta){
             case "usuario no existe":
-                
+                System.out.println("no chamo, andas perdido");
                 break;
                 
             case "invalid password":
-                
+                System.out.println("No andas tan perdido, pero la contrasena esta rara");
                 break;
                 
             case "Usuario ya existe":
-                
+                System.out.println("sorry bro, alguien ya te quito el nombre");
                 break;
                 
             default:
-                System.out.println("Todo fino, adelante");
                 return true;
         }
+        System.out.println(respuesta);
         return false;
     }
     public void comando(int instruccion,String fileName){
@@ -173,31 +173,31 @@ public class Controlador
     
     public void descargarArchivo(String nombre) throws IOException{
         comando(3,nombre);
-        ServerSocket serverSocket = new ServerSocket(2070);
-        
-        Socket socket = serverSocket.accept();
-        DataInputStream input = new DataInputStream(socket.getInputStream());
-        JFileChooser carpeta = new JFileChooser();
-        carpeta.setDialogTitle("Seleccione la ubicación de descarga");
-        carpeta.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        carpeta.setCurrentDirectory(ultimaCarpeta);
-        carpeta.setAcceptAllFileFilterUsed(false);
-        
-        if(carpeta.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+        try (ServerSocket serverSocket = new ServerSocket(2070)) {
             
-            File selectedPath=carpeta.getSelectedFile();
+            JFileChooser carpeta = new JFileChooser();
+            carpeta.setDialogTitle("Seleccione la ubicación de descarga");
+            carpeta.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            carpeta.setCurrentDirectory(ultimaCarpeta);
+            carpeta.setAcceptAllFileFilterUsed(false);
             
-            byte[] fileBytes=new byte[input.readInt()];
-            input.readFully(fileBytes);
-            ultimaCarpeta=selectedPath;
-            File file = new File(ultimaCarpeta+"\\"+nombre);
-            FileOutputStream file1 = new FileOutputStream(file);
-            file1.write(fileBytes);
-            file1.close();
-            input.close();
+            if(carpeta.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+                
+                File selectedPath=carpeta.getSelectedFile();
+                Socket socket = serverSocket.accept();
+                DataInputStream input = new DataInputStream(socket.getInputStream());
+                byte[] fileBytes=new byte[input.readInt()];
+                input.readFully(fileBytes);
+                ultimaCarpeta=selectedPath;
+                File file = new File(ultimaCarpeta+"\\"+nombre);
+                FileOutputStream file1 = new FileOutputStream(file);
+                file1.write(fileBytes);
+                file1.close();
+                input.close();
+                socket.close();
+            }
+            
         }
-        socket.close();
-        serverSocket.close();
     }
     
 
