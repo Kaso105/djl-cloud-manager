@@ -16,7 +16,7 @@ public class Cliente extends javax.swing.JFrame {
         control = new Controlador();
         Inicio.setSize(600, 600);
         Inicio.setVisible(true);
-        
+        Inicio.setAlwaysOnTop(true);
     }
 
 
@@ -62,7 +62,6 @@ public class Cliente extends javax.swing.JFrame {
         jPopupMenu1.add(DescargarArchivo);
 
         Inicio.setTitle("Inicio de sesion");
-        Inicio.setAlwaysOnTop(true);
         Inicio.setBackground(new java.awt.Color(153, 255, 153));
         Inicio.addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
@@ -111,21 +110,21 @@ public class Cliente extends javax.swing.JFrame {
             .addGroup(InicioLayout.createSequentialGroup()
                 .addGroup(InicioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(InicioLayout.createSequentialGroup()
+                        .addGap(153, 153, 153)
+                        .addComponent(Registrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(91, 91, 91)
+                        .addComponent(InicioSesion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(InicioLayout.createSequentialGroup()
                         .addGap(63, 63, 63)
                         .addGroup(InicioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(InicioLayout.createSequentialGroup()
                                 .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(74, 74, 74)
+                                .addGap(72, 72, 72)
                                 .addComponent(Contrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(InicioLayout.createSequentialGroup()
                         .addGap(214, 214, 214)
-                        .addComponent(LABLE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(InicioLayout.createSequentialGroup()
-                        .addGap(153, 153, 153)
-                        .addComponent(Registrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(91, 91, 91)
-                        .addComponent(InicioSesion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(LABLE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(156, Short.MAX_VALUE))
             .addGroup(InicioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(InicioLayout.createSequentialGroup()
@@ -326,6 +325,7 @@ public class Cliente extends javax.swing.JFrame {
 
     private void InicioSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InicioSesionActionPerformed
         try {
+            Inicio.setAlwaysOnTop(false);
             // TODO add your handling code here:
             if(control.enviarUsuario(userName.getText(), Contrasena.getText(), 4)){
                 actualizarTabla();
@@ -342,6 +342,7 @@ public class Cliente extends javax.swing.JFrame {
 
     private void RegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegistrarActionPerformed
         try {
+            Inicio.setAlwaysOnTop(false);
             // TODO add your handling code here:
             if(control.enviarUsuario(userName.getText(), Contrasena.getText(), 5)){
                 Inicio.dispose();

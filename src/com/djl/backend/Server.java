@@ -184,15 +184,13 @@ public class Server {
     public static boolean verificarUsuario(String nombreYpassword) throws IOException{
         String[] user=nombreYpassword.split("`");
         String respuesta="";
-        String pass=user[1].replace("\n", "");
-        pass=pass.replaceAll("\t", "");
         boolean existeUsuario=false;
         boolean contrasenaCorrecta=false;
         boolean bool=false;
         for(Usuario x:usuarios){
             if(x.getUserName().equals(user[0])){
                 existeUsuario=true;
-                if(x.getPassword().equals(pass)){
+                if(x.getPassword().equals(user[1])){
                     contrasenaCorrecta=true;
                     respuesta="todo fino, adelante";
                     juan=x;

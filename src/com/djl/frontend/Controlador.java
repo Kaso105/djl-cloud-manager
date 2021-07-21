@@ -15,7 +15,9 @@ import java.net.Socket;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -127,7 +129,11 @@ public class Controlador
     
     public boolean enviarUsuario(String userName,String password,int instruccion) throws IOException{
         String unido=userName+"`"+password;
-        
+        if(userName.equals("")||password.equals("")){
+            JOptionPane.showMessageDialog(null, "Los campos no pueden estar vacios");
+            return false;
+        }
+            
         comando(instruccion,unido); //instruccion manda lo que deseemos realizar(registrar usuario o iniciar sesion), como vamos a enviar los mismos datos, solo cambiaremos lo que el server haga con ellos
         //si instruccion==4 inicia sesion, si instruccion ==5 el servidor registra al usuario
         
@@ -140,15 +146,13 @@ public class Controlador
         input.close();
         switch(respuesta){
             case "usuario no existe":
-                System.out.println("no chamo, andas perdido");
+                JOptionPane.showMessageDialog(null, "Usuario no existe");
                 break;
                 
             case "invalid password":
-                System.out.println("No andas tan perdido, pero la contrasena esta rara");
                 break;
                 
             case "Usuario ya existe":
-                System.out.println("sorry bro, alguien ya te quito el nombre");
                 break;
                 
             default:
